@@ -21,12 +21,12 @@ class Treasure:
 
 
 def get_treasure():
-    # TODO: change these descriptions
-    t1 = ["Hat of hatting", "Hats hats really hattily."]
-    t2 = ["Sword of swashbuckling", "Goes swoosh. Wow!"]
-    t3 = ["Boots of running really fast", "Infinite mobility."]
-    t4 = ["A bag of gold", "Disrespect monsters, acquire currency"]
-    t5 = ["Buckner's buckler", "You assume this belongs to Buckner"]
-    treasures = [t1, t2, t3, t4, t5]
+    t1 = ["Attack Potion", "A crimson draught that swirls with energy."]
+    t2 = ["Tarnished Heirloom", "A relic of some royal family lost to time."]
+    t3 = ["Waterlogged Boot", "Not much dryer than the ones you have on."]
+    t4 = ["Sack of Coins", "You won't find much use for money out here."]
+    t5 = ["Rusted Weapon", "An implement of war showing signs of wear."]
+    t6 = ["Timber", "Dry wood is a rare thing to find in this damp bog."]
+    treasures = [t1, t2, t3, t4, t5, t6]
     selected_treasure = random.choice(treasures)
     return Treasure(selected_treasure[0], selected_treasure[1])
