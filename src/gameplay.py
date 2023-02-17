@@ -165,6 +165,10 @@ def play_game(flag):
             check = fight_monster(player, room_, initiative, flag)
             if check == 0:
                 print("You died!")
+                if not player.treasure:
+                    print("Your bags were empty")
+                else:
+                    print("Inventory\n", player.get_treasure_printout())
                 print("Exiting....")
                 return False
 
@@ -233,6 +237,8 @@ def fight_monster(player, room_, initiative, flag):
                 print("Your bags are empty")
             else:
                 print(player.get_treasure_printout())
+                if player.has_treasure("Attack Potion"):
+                    print("Want to use potion?")
 
         elif choice == "status":
 
