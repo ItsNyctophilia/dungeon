@@ -130,9 +130,6 @@ def play_game(flag):
     print(room.create_description_line(ip, room.get_flavor_line()),
           main_menu, sep="")
 
-    player.add_treasure(treasure.get_treasure())
-    player.add_treasure(treasure.get_treasure())
-    player.add_treasure(treasure.get_treasure())
     while (True):
         choice = input("> ")
         choice = choice.lower().strip()
@@ -192,6 +189,10 @@ def fight_monster(player, initiative, flag):
     combat_menu.add_selection("Status")
  
     monster = Monster.generate_monster()
+
+    if random.randint(0, 100) < (monster.hp + monster.dice) * 10:
+        monster.add_treasure(treasure.get_treasure)
+
     print(monster.description)
     while (True):
         print("Your HP:", player.hp, "-", monster.name.strip("\""), "HP:", monster.hp)
@@ -201,7 +202,10 @@ def fight_monster(player, initiative, flag):
 
         if choice == "inventory":
 
-            print("Placeholder loot bag")
+            if not player.treasure:
+                print("Your bags are empty")
+            else:
+                print(player.get_treasure_printout())
 
         elif choice == "status":
 
