@@ -1,4 +1,5 @@
 import random
+from . import treasure
 from . import room
 from .menu import Menu
 from .monster import Monster
@@ -132,12 +133,18 @@ def play_game(flag):
     print(room.create_description_line(ip, room.get_flavor_line()),
           main_menu, sep="")
 
+    player.add_treasure(treasure.get_treasure())
+    player.add_treasure(treasure.get_treasure())
+    player.add_treasure(treasure.get_treasure())
     while (True):
         choice = input("> ")
         choice = choice.lower().strip()
         if choice == "inventory":
 
-            print("Placeholder loot bag")
+            if not player.treasure:
+                print("Your bags are empty")
+            else:
+                print(player.get_treasure_printout())
 
         elif choice == "explore":
 
