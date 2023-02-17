@@ -19,9 +19,7 @@ def main():
     test.dice = 5
     print(test)
 
-    monster = Monster("Beholder", "Giant Eyeball")
-    monster.hp = 10
-    monster.dice = 3
+    monster = Monster.generate_monster()
     print(monster)
 
 
