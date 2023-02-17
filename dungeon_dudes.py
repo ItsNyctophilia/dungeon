@@ -73,6 +73,22 @@ class Menu:
         self._selections.remove(selection)
 
 
+def generate_room(num_foes=-1):
+    """Randomly generates a room object to be explored by the player
+
+    Keyword arguments:
+    num_foes -- an optional number of enemies for the room
+
+    Returns a room object."""
+    random.seed()
+    description = "This is a placeholder."
+    # TODO: create a description-generation function
+    if num_foes == -1:
+        num_foes = random.randint(0, 3)
+    room = Room(description, num_foes)
+    return room
+
+
 def main():
     m = Menu()
     m.add_selection("Inventory")
@@ -82,7 +98,7 @@ def main():
     m.add_selection("Attack")
     print(m)
 
-    r = Room("This is a placeholder.", 20)
+    r = generate_room()
     print(r)
 
 
