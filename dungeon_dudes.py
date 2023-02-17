@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from src.entity import Entity
+
 
 class Menu:
     def __init__(self):
@@ -38,6 +40,11 @@ def main():
     m.add_selection("Sense")
     m.add_selection("Attack")
     print(m)
+
+    test = Entity()
+    test.hp = 100
+    test.dice = 5
+    print(test)
 
 
 if __name__ == "__main__":
