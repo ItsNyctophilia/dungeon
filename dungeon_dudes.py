@@ -14,7 +14,7 @@ def main():
     parser = OptionParser()
     parser.add_option("-d", "--dice", help="Print dice rolls to the screen.",
                       action='store_true', default=False, dest='flag')
-    options = parser.parse_args
+    (options, args) = parser.parse_args()
 
     main_menu = Menu()
     main_menu.add_selection("Inventory")
@@ -67,9 +67,11 @@ def main():
             exit()
 
         elif choice == "fight":
-            monster = Monster.generate_monster()
-            initiative = game.roll_initiative()
-            game.combat(player, monster, initiative, options)
+            while room_.num_foes > 0:
+                monster = Monster.generate_monster()
+                initiative = game.roll_initiative()
+                game.combat(player, monster, initiative, options.flag)
+                room_.num_foes -= 1
             print(main_menu)
 
         else:
