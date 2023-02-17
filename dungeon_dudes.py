@@ -2,47 +2,7 @@
 
 import random
 import textwrap
-
-
-class Room:
-    def __init__(self, description, num_foes=-1):
-        self._description = description
-        self._num_foes = num_foes
-        self._treasure = []
-
-    def __str__(self):
-        return f"{self._description}\n{self._num_foes}\n{self._treasure}"
-
-    @property
-    def description(self):
-        """World-building description of the room"""
-        return self._description
-
-    @property
-    def num_foes(self):
-        """Number of enemies remaining in the room"""
-        return self._num_foes
-
-    @num_foes.setter
-    def num_foes(self, num_foes):
-        self._num_foes = num_foes
-
-    @property
-    def treasure(self):
-        """List of the treasure items found in the room"""
-        return self._treasure
-
-    @treasure.setter
-    def treasure(self, treasure):
-        self._treasure = treasure
-
-    def add_treasure(self, new_treasure):
-        """Add the given treasure to the room"""
-        self._treasure.append(new_treasure)
-
-    def del_treasure(self, treasure):
-        """Remove the given treasure from the room"""
-        self._treasure.remove(treasure)
+from src.room import Room
 
 
 class Menu:
@@ -78,11 +38,11 @@ def get_description():
     p1 = "As you trudge onwards, enduring the scrapes of brambled " \
          "overgrowth and pushing past the ruins of buildings lost to " \
          "time, you can feel a gentle rain coming from overhead. Just " \
-         "above you, the thicket breaks just enough to let several wisps" \
+         "above you, the thicket breaks just enough to let several wisps " \
          " of light illuminate the path forward, a welcome sight in the " \
          "otherwise choking darkness of the bog."
 
-    p2 = "The heavy footfalls of your boots are silenced momentarily as one" \
+    p2 = "The heavy footfalls of your boots are stifled momentarily as one " \
          "of your legs sinks into a patch of mud, forcing you to wrest it " \
          "free. While brushing the muck off of your clothes, you're able " \
          "to get a good look at your surroundings. Everything as far as " \
@@ -147,8 +107,8 @@ def main():
     main_menu.add_selection("Status")
 
     # ip == "introductory prompt"
-    ip = "You awaken in a dark thicket, choked by overgrowth and drowned" \
-         "in swampwater. Mosquitos incessantly bite you through your" \
+    ip = "You awaken in a dark thicket, choked by overgrowth and drowned " \
+         "in swampwater. Mosquitos incessantly bite you through your " \
          "clothes and your boots are already waterlogged. The only source " \
          "of light comes from a torch twenty or so paces in the distance, " \
          "roaring strong with a flame that refuses to die in spite of the " \
@@ -163,15 +123,22 @@ def main():
         # TODO: check if num_enemies > 0
         # TODO: resolve_combat()
         if choice == "inventory":
+
             print("Placeholder loot bag")
+
         elif choice == "explore":
+
             room = generate_room()
             print(create_description_line(
                   room.description, get_flavor_line()), main_menu, sep="")
             continue
+
         elif choice == "status":
+
             print("Placeholder health value")
+
         else:
+
             print("Unrecognized command")
 
 
