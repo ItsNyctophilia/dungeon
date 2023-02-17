@@ -25,3 +25,7 @@ class Menu:
     def del_selection(self, selection):
         """Remove the given selection from the menu"""
         self._selections.remove(selection)
+    
+    def replace_selection(self, new_selection, index):
+        """Add the given selection to the menu"""
+        self._selections[index] = new_selection

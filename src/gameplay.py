@@ -66,55 +66,52 @@ def check_hit(attacker, defender, flag):
 
 def combat(player, monster, initiative, flag):
     """Loops through the combat until someone dies."""
-    # TODO: End the program if the player dies
-    while True:
-        print("Your HP:", player.hp, "-", monster.name, "HP:", monster.hp)
-        # If the initiative is true that means the player attacks first.
-        if initiative:
-            # Player attacks Monster
-            if check_hit(player, monster, flag):
-                print("Bonked the Monster!")
-                monster.hit()
-                if check_health(monster):
+    # If the initiative is true that means the player attacks first.
+    if initiative:
+        # Player attacks Monster
+        if check_hit(player, monster, flag):
+            print("Bonked the Monster!")
+            monster.hit()
+            if check_health(monster):
                     print("Monster died")
-                    return True
-            else:
-                print("How did you miss?")
-
-            # Monster attacks Player
-            if check_hit(monster, player, flag):
-                print("You took the hit like a Champ!")
-                player.hit()
-                if check_health(player):
-                    return False
-            else:
-                print("The Monster might need some glasses!")
+                    return 1
         else:
-            # Monster attacks Player
-            if check_hit(monster, player, flag):
-                print("You took the hit like a Champ!")
-                player.hit()
-                if check_health(player):
-                    return False
-            else:
-                print("The Monster might need some glasses!")
+            print("How did you miss?")
 
-            # Player attacks Monster
-            if check_hit(player, monster, flag):
-                print("Bonked the Monster!")
-                monster.hit()
-                if check_health(monster):
-                    print("Monster died")
-                    return True
-            else:
-                print("How did you miss?")
+        # Monster attacks Player
+        if check_hit(monster, player, flag):
+            print("You took the hit like a Champ!")
+            player.hit()
+            if check_health(player):
+                return 0
+        else:
+            print("The Monster might need some glasses!")
+    else:
+        # Monster attacks Player
+        if check_hit(monster, player, flag):
+            print("You took the hit like a Champ!")
+            player.hit()
+            if check_health(player):
+                return 0
+        else:
+            print("The Monster might need some glasses!")
+
+        # Player attacks Monster
+        if check_hit(player, monster, flag):
+            print("Bonked the Monster!")
+            monster.hit()
+            if check_health(monster):
+                print("Monster died")
+                return 1
+        else:
+            print("How did you miss?")
 
 
 def play_game(flag):
     """Function that plays Dungeon Dudes"""
     main_menu = Menu()
-    main_menu.add_selection("Inventory")
     main_menu.add_selection("Explore")
+    main_menu.add_selection("Inventory")
     main_menu.add_selection("Status")
     main_menu.add_selection("Quit")
 
@@ -144,9 +141,10 @@ def play_game(flag):
             room_ = room.generate_room()
             print(room.create_description_line(
                   room_.description, room.get_flavor_line()))
-            while room_.num_foes > 0:
-                if not clear_room(player, room_, flag):
-                    return False
+            if room_.num_foes > 0:
+                initiative = roll_initiative()
+                main_menu.replace_selection("Fight", 0)
+                fight_flag = True
             print(main_menu, sep="")
 
         elif choice == "status":
@@ -158,55 +156,60 @@ def play_game(flag):
             print("Exiting....")
             return False
 
+        elif choice == "fight" and fight_flag:
+
+            check = fight_monster(player, initiative, flag)
+            if check == 0:
+                print("You died!")
+                print("Exiting....")
+                return False
+
+            room_.num_foes -= 1
+
+            print(room_.num_foes, "Monsters left!")
+            if room_.num_foes == 0:
+                main_menu.replace_selection("Explore", 0)
+                fight_flag = False
+            print(main_menu, sep="")
+
         else:
 
             print("Unrecognized command")
 
 
-def clear_room(player, room_, flag):
+def fight_monster(player, initiative, flag):
     combat_menu = Menu()
-    combat_menu.add_selection("Fight")
+    combat_menu.add_selection("Attack")
     combat_menu.add_selection("Investigate")
     combat_menu.add_selection("Inventory")
     combat_menu.add_selection("Status")
-    combat_menu.add_selection("Quit")
-
+ 
+    monster = Monster.generate_monster()
+    print(monster.description)
     while (True):
-        if room_.num_foes == 0:
-            break
-
+        print("Your HP:", player.hp, "-", monster.name.strip("\""), "HP:", monster.hp)
         print(combat_menu)
         choice = input("> ")
         choice = choice.lower().strip()
 
-        if choice == "fight":
-            monster = Monster.generate_monster()
-            initiative = roll_initiative()
-            if not combat(player, monster, initiative, flag):
-                print("Game Over Dude!")
-                return False
-            room_.num_foes -= 1
-            print("\n", room_.num_foes, " Monsters remaining!\n")
-
-        elif choice == "inventory":
+        if choice == "inventory":
 
             print("Placeholder loot bag")
-
-        elif choice == "investigate":
-
-            print("Placeholder Investigate")
 
         elif choice == "status":
 
             print("Current Health:", player.hp)
 
-        elif choice == "quit":
+        elif choice == "investigate":
 
-            print("Exiting....")
-            return False
+            print("Monster Health:", monster.hp)
+
+        elif choice == "attack":
+
+            check = combat(player, monster, initiative, flag)
+            if check == 1 or check == 0:
+                return check
 
         else:
 
             print("Unrecognized command")
-
-    return True
