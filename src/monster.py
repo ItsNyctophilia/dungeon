@@ -1,4 +1,5 @@
 import random
+import os
 from .entity import Entity
 
 
@@ -25,7 +26,9 @@ class Monster(Entity):
     def generate_monster():
         random.seed()
         # TODO: Change to read from Home Directory.
-        with open("src/.dd_monsters") as file:
+        home_directory = os.path.expanduser('~')
+        path = os.path.join(home_directory, '.dd_monsters')
+        with open(path) as file:
             file.readline()
             lines = file.readlines()
 
