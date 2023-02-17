@@ -149,11 +149,18 @@ def play_game(flag):
         elif choice == "explore":
 
             room_ = room.generate_room()
+            room_.add_treasure(treasure.get_treasure())
+            room_.add_treasure(treasure.get_treasure())
+            print(room_.get_treasure_printout())
+            item = input("Pick up an item please: ")
+            player.add_treasure(room_.get_treasure_object(item))
+            room_.del_treasure(item)
+
             print(room.create_description_line(
                   room_.description, room.get_flavor_line()))
-            while room_.num_foes > 0:
-                if not clear_room(player, room_, flag):
-                    return False
+            # while room_.num_foes > 0:
+            #     if not clear_room(player, room_, flag):
+            #         return False
             print(main_menu, sep="")
 
         elif choice == "status":
@@ -168,52 +175,3 @@ def play_game(flag):
         else:
 
             print("Unrecognized command")
-
-
-def clear_room(player, room_, flag):
-    combat_menu = Menu()
-    combat_menu.add_selection("Fight")
-    combat_menu.add_selection("Investigate")
-    combat_menu.add_selection("Inventory")
-    combat_menu.add_selection("Status")
-    combat_menu.add_selection("Quit")
-
-    while (True):
-        if room_.num_foes == 0:
-            break
-
-        print(combat_menu)
-        choice = input("> ")
-        choice = choice.lower().strip()
-
-        if choice == "fight":
-            monster = Monster.generate_monster()
-            initiative = roll_initiative()
-            if not combat(player, monster, initiative, flag):
-                print("Game Over Dude!")
-                return False
-            room_.num_foes -= 1
-            print("\n", room_.num_foes, " Monsters remaining!\n")
-
-        elif choice == "inventory":
-
-            print("Placeholder loot bag")
-
-        elif choice == "investigate":
-
-            print("Placeholder Investigate")
-
-        elif choice == "status":
-
-            print("Current Health:", player.hp)
-
-        elif choice == "quit":
-
-            print("Exiting....")
-            return False
-
-        else:
-
-            print("Unrecognized command")
-
-    return True
