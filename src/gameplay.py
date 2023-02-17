@@ -1,4 +1,8 @@
 import random
+from . import room
+from .menu import Menu
+from .monster import Monster
+from .hero import Hero
 
 
 def roll_dice(num_of_dice):
@@ -73,7 +77,7 @@ def combat(player, monster, initiative, flag):
                 monster.hit()
                 if check_health(monster):
                     print("Monster died")
-                    break
+                    return True
             else:
                 print("How did you miss?")
 
@@ -82,8 +86,7 @@ def combat(player, monster, initiative, flag):
                 print("You took the hit like a Champ!")
                 player.hit()
                 if check_health(player):
-                    print("Game Over Loser!")
-                    break
+                    return False
             else:
                 print("The Monster might need some glasses!")
         else:
@@ -92,8 +95,7 @@ def combat(player, monster, initiative, flag):
                 print("You took the hit like a Champ!")
                 player.hit()
                 if check_health(player):
-                    print("Game Over Loser!")
-                    break
+                    return False
             else:
                 print("The Monster might need some glasses!")
 
@@ -103,6 +105,108 @@ def combat(player, monster, initiative, flag):
                 monster.hit()
                 if check_health(monster):
                     print("Monster died")
-                    break
+                    return True
             else:
                 print("How did you miss?")
+
+
+def play_game(flag):
+    """Function that plays Dungeon Dudes"""
+    main_menu = Menu()
+    main_menu.add_selection("Inventory")
+    main_menu.add_selection("Explore")
+    main_menu.add_selection("Status")
+    main_menu.add_selection("Quit")
+
+    player = Hero()
+
+    # ip == "introductory prompt"
+    ip = "You awaken in a dark thicket, choked by overgrowth and drowned " \
+         "in swampwater. Mosquitos incessantly bite you through your " \
+         "clothes and your boots are already waterlogged. The only source " \
+         "of light comes from a torch twenty or so paces in the distance, " \
+         "roaring strong with a flame that refuses to die in spite of the " \
+         "rainwater dripping from the canopy above. Seeing no other " \
+         "option, you bring yourself forward and grab ahold of it, " \
+         "beginning your journey out of this blackened bog."
+    print(room.create_description_line(ip, room.get_flavor_line()),
+          main_menu, sep="")
+
+    while (True):
+        choice = input("> ")
+        choice = choice.lower().strip()
+        if choice == "inventory":
+
+            print("Placeholder loot bag")
+
+        elif choice == "explore":
+
+            room_ = room.generate_room()
+            print(room.create_description_line(
+                  room_.description, room.get_flavor_line()))
+            while room_.num_foes > 0:
+                if not clear_room(player, room_, flag):
+                    return False
+            print(main_menu, sep="")
+
+        elif choice == "status":
+
+            print("Current Health:", player.hp)
+
+        elif choice == "quit":
+
+            print("Exiting....")
+            return False
+
+        else:
+
+            print("Unrecognized command")
+
+
+def clear_room(player, room_, flag):
+    combat_menu = Menu()
+    combat_menu.add_selection("Fight")
+    combat_menu.add_selection("Investigate")
+    combat_menu.add_selection("Inventory")
+    combat_menu.add_selection("Status")
+    combat_menu.add_selection("Quit")
+
+    while (True):
+        if room_.num_foes == 0:
+            break
+
+        print(combat_menu)
+        choice = input("> ")
+        choice = choice.lower().strip()
+
+        if choice == "fight":
+            monster = Monster.generate_monster()
+            initiative = roll_initiative()
+            if not combat(player, monster, initiative, flag):
+                print("Game Over Dude!")
+                return False
+            room_.num_foes -= 1
+            print("\n", room_.num_foes, " Monsters remaining!\n")
+
+        elif choice == "inventory":
+
+            print("Placeholder loot bag")
+
+        elif choice == "investigate":
+
+            print("Placeholder Investigate")
+
+        elif choice == "status":
+
+            print("Current Health:", player.hp)
+
+        elif choice == "quit":
+
+            print("Exiting....")
+            return False
+
+        else:
+
+            print("Unrecognized command")
+
+    return True

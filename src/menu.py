@@ -5,7 +5,7 @@ class Menu:
     def __str__(self):
         """Return a string of the printout of sorted menu options"""
         menu_string = []
-        for idx, selection in enumerate(sorted(self._selections), start=1):
+        for idx, selection in enumerate(self._selections, start=1):
             menu_string.append(f"{idx}. {selection}")
         return "\n".join(menu_string)
 
