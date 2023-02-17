@@ -2,6 +2,7 @@
 
 from src.menu import Menu
 from src.entity import Entity
+from src.monster import Monster
 
 
 def main():
@@ -17,6 +18,9 @@ def main():
     test.hp = 100
     test.dice = 5
     print(test)
+
+    monster = Monster.generate_monster()
+    print(monster)
 
 
 if __name__ == "__main__":
