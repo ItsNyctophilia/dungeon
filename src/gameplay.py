@@ -65,9 +65,12 @@ def check_hit(attacker, defender, flag):
         return False
 
 
-def combat(player, monster, initiative, flag):
-    """Loops through the combat until someone dies."""
+def combat(player, monster, initiative, flag, buff=False):
+    """Does 1 combat round"""
     # If the initiative is true that means the player attacks first.
+    if buff:
+        player.dice += 1
+
     if initiative:
         # Player attacks Monster
         if check_hit(player, monster, flag):
@@ -117,6 +120,9 @@ def play_game(flag):
     main_menu.add_selection("Quit")
 
     player = Hero()
+    player.add_treasure(treasure.get_treasure())
+    player.add_treasure(treasure.get_treasure())
+    player.add_treasure(treasure.get_treasure())
 
     # ip == "introductory prompt"
     ip = "You awaken in a dark thicket, choked by overgrowth and drowned " \
@@ -224,9 +230,11 @@ def fight_monster(player, room_, initiative, flag):
     if random.randint(0, 100) < (monster.hp + monster.dice) * 10:
         room_.add_treasure(treasure.get_treasure())
 
+    buff = False
+
     print(monster.description)
     while (True):
-        print("Your HP:", player.hp, "-", monster.name.strip("\""), "HP:", monster.hp)
+        print("\nYour HP:", player.hp, "-", monster.name.strip("\""), "HP:", monster.hp)
         print(combat_menu)
         choice = input("> ")
         choice = choice.lower().strip()
@@ -238,8 +246,20 @@ def fight_monster(player, room_, initiative, flag):
             else:
                 print(player.get_treasure_printout())
                 if player.has_treasure("Attack Potion"):
-                    print("Want to use potion?")
-
+                    potion = input("Want to use a potion? Yes/No: ")
+                    while True:
+                        potion = potion.lower().strip()
+                        if potion == "yes":
+                            print("Plus 1 dice on your next attack!")
+                            buff = True
+                            break
+                        elif potion == "no":
+                            break
+                        else:
+                            print("Invalid Input")
+                            potion = input("Yes/No: ")
+                            continue
+                    
         elif choice == "status":
 
             print("Current Health:", player.hp)
@@ -250,7 +270,12 @@ def fight_monster(player, room_, initiative, flag):
 
         elif choice == "attack":
 
-            check = combat(player, monster, initiative, flag)
+            check = combat(player, monster, initiative, flag, buff)
+
+            if buff:
+                player.dice -= 1
+                buff = False
+
             if check == 1 or check == 0:
                 return check
 

@@ -76,6 +76,16 @@ class Entity:
         self._treasure.pop(treasure.name, None)
         return True
 
+    def has_treasure(self, treasure_name):
+        """Checks if the entity's inventory contains the treasure
+
+        Returns True if successful or if the item was not found
+        inside of the dictionary and False if the action failed
+        as a result of the object not being a Treasure."""
+        if treasure_name in self._treasure.keys():
+            return True
+        return False
+
     def hit(self):
         """Decrement HP if attack lands"""
         self._hp -= 1
