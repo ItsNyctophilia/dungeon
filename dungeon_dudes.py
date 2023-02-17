@@ -90,16 +90,30 @@ def generate_room(num_foes=-1):
 
 
 def main():
-    m = Menu()
-    m.add_selection("Inventory")
-    m.add_selection("Explore")
-    m.add_selection("Status")
-    m.add_selection("Sense")
-    m.add_selection("Attack")
-    print(m)
 
-    r = generate_room()
-    print(r)
+    main_menu = Menu()
+    main_menu.add_selection("Inventory")
+    main_menu.add_selection("Explore")
+    main_menu.add_selection("Status")
+
+    room = generate_room(0)
+    while (True):
+        print(
+            "You find yourself in a place that can be described as such:\n",
+            room.description, "\n", main_menu, sep="")
+        choice = input("> ")
+        choice = choice.lower().strip()
+        # TODO: check if num_enemies > 0
+        # TODO: resolve_combat()
+        if choice == "inventory":
+            print("Placeholder loot bag")
+        elif choice == "explore":
+            room = generate_room()
+            continue
+        elif choice == "status":
+            print("Placeholder health value")
+        else:
+            print("Unrecognized command")
 
 
 if __name__ == "__main__":
