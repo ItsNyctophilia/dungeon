@@ -2,6 +2,7 @@
 
 from src.menu import Menu
 from src.entity import Entity
+from src.monster import Monster
 
 
 def main():
@@ -17,6 +18,11 @@ def main():
     test.hp = 100
     test.dice = 5
     print(test)
+
+    monster = Monster("Beholder", "Giant Eyeball")
+    monster.hp = 10
+    monster.dice = 3
+    print(monster)
 
 
 if __name__ == "__main__":
