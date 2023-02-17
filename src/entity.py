@@ -8,11 +8,11 @@ class Entity:
         self._treasure = {}
 
     def __str__(self):
-        return f'{self._hp}, {self._dice}'
+        return f'{self._hp}, {self._dice}, {self._treasure}'
 
     @property
     def hp(self):
-        """Set the health to the specified value"""
+        """The amount of health a given entity has"""
         return self._hp
 
     @hp.setter
@@ -22,7 +22,7 @@ class Entity:
 
     @property
     def dice(self):
-        """Set the amount of dice to the specified value"""
+        """The amount of dice a given entity rolls during combat"""
         return self._dice
 
     @dice.setter
@@ -34,15 +34,18 @@ class Entity:
     def treasure(self):
         """Treasure held by an entity"""
         return self._treasure
-    
+
     def get_treasure_printout(self):
         """Returns a formatted string of the entity's inventory"""
         printout = []
+
+        # "Format: [number]x [item], [description]\n"
+        # Ex. "1x Sword of Swording, It looks very sharp."
         for item in self._treasure:
             printout.append("".join([str(self._treasure[item][0]),
                             "x ", item, ", ", self._treasure[item][1]]))
         return "\n".join(printout)
-    
+
     def add_treasure(self, treasure):
         """Add a treasure object to an entity's inventory.
 
