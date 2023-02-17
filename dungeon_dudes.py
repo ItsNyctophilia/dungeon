@@ -5,6 +5,13 @@ class Menu:
     def __init__(self):
         self._selections = []
 
+    def __str__(self):
+        """Return a string of the printout of sorted menu options"""
+        menu_string = []
+        for idx, selection in enumerate(sorted(self._selections), start=1):
+            menu_string.append(f"{idx}. {selection}")
+        return "\n".join(menu_string)
+
     @property
     def selections(self):
         """One of the selectable options in a menu"""
