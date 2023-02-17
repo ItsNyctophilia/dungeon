@@ -1,0 +1,6 @@
+Name; Description; HP; Dice
+"Behemoth"; "A massive horned creature looms over you, baring its sharp fangs. It appears ready to attack!"; 8; 3
+"Nightmare"; "A tall, ugly old woman looks down at you menacingly. She draws back her long claws and prepares to slash at you!"; 6; 2
+"Dragon Slayer Ornstein", "A regal-looking man in expensive armors appears before you. You can't see the face behind his lion-shaped helmet, but you're sure he's challenging you to a duel."; 7; 3
+"Dullahan"; "A shadow appears in front of you, appearing to be a man on horseback. Once you get closer, you realize that he has no head, he's armed, and he's charging straight towards you, sword raised!"; 5; 2
+"Cave Screamer"; "An undead creature hobbles toward you, dragging its broken leg behind it. You smell the stench of its rotting flesh grow more and more pungent as it draws near. It lets out a horrific shriek and lunges at you ravenously."; 4; 1
