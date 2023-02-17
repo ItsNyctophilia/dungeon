@@ -1,5 +1,6 @@
 import random
 import textwrap
+from .treasure import Treasure
 
 
 class Room:
@@ -34,13 +35,51 @@ class Room:
     def treasure(self, treasure):
         self._treasure = treasure
 
+    def get_treasure_object(self, treasure_name):
+        """Get the first object associated with a given treasure
+
+        Returns the first object in self._treasure with the
+        same name as treasure_name and None if one could
+        not be found."""
+
+        for item in self._treasure:
+            # Index 0 is the name and index 1 is the object reference
+            if treasure_name == item[0]:
+                return item[1]
+        return None
+
+    def get_treasure_printout(self):
+        """Returns a formatted string of the entity's inventory"""
+        printout = []
+
+        # "Format: [number]x [item], [description]\n"
+        # Ex. "1x Sword of Swording, It looks very sharp."
+        for item in self._treasure:
+            # Index 0 is the name of the treasure
+            printout.append("".join(item[0]))
+        return "\n".join(printout)
+
     def add_treasure(self, new_treasure):
-        """Add the given treasure to the room"""
-        self._treasure.append(new_treasure)
+        """Add the given treasure to the room
+
+        Returns True if successful and False if the action failed
+        due to the object to be added not being a Treasure"""
+        if not isinstance(new_treasure, Treasure):
+            return False
+        self._treasure.append([new_treasure.name, new_treasure])
+        return True
 
     def del_treasure(self, treasure):
-        """Remove the given treasure from the room"""
-        self._treasure.remove(treasure)
+        """Remove the given treasure from the room
+
+        Returns True if successful and False if the action failed
+        or if the object to be removed was not a Treasure."""
+        if not isinstance(treasure, Treasure):
+            return False
+        if [treasure.name, treasure] not in self._treasure:
+            return False
+        self._treasure.remove([treasure.name, treasure])
+        return True
 
 
 def get_description():

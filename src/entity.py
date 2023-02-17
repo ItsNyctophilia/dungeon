@@ -58,10 +58,10 @@ class Entity:
             # number of instances an entity has of a given treasure
             # and the description of that item, in a list
             count = self._treasure[treasure.name][0] + 1
-            self._treasure.update({treasure.name: 
+            self._treasure.update({treasure.name:
                                    [count, treasure.description]})
         else:
-            self._treasure.setdefault(treasure.name, 
+            self._treasure.setdefault(treasure.name,
                                       [1, treasure.description])
         return True
 
