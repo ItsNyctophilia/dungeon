@@ -1,6 +1,7 @@
 import random
 import textwrap
 
+
 class Room:
     def __init__(self, description, num_foes=-1):
         self._description = description

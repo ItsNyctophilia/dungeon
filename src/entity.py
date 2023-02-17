@@ -1,8 +1,10 @@
+from .treasure import Treasure
+
 class Entity:
     def __init__(self):
         self._hp = 0
         self._dice = 0
-        self._treasure = []
+        self._treasure = {}
 
     def __str__(self):
         return f'{self._hp}, {self._dice}'
@@ -27,8 +29,26 @@ class Entity:
         """Set the amount of dice to the specified value"""
         self._dice = num_of_dice
 
-    def treasure(self, treasure):
-        """Add a treasure to the list"""
+    @property
+    def treasure(self):
+        """Treasure held by an entity"""
+        return self._treasure
+
+    def add_treasure(self, treasure):
+        """Add a treasure object to an entity's inventory.
+        
+        Returns True if successful and False if the action failed."""
+        if not isinstance(treasure, Treasure):
+            return False
+        elif treasure.name in self._treasure.keys():
+            count = self._treasure[treasure.name] + 1
+            self._treasure.update({treasure.name: count})
+        else:
+            self._treasure.setdefault(treasure.name, 1)
+        return True
+
+    def del_treasure(self, treasure):
+        """Remove a treasure from an entity's inventory"""
         self._treasure.append(treasure)
 
     def hit(self):
