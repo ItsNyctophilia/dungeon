@@ -5,7 +5,6 @@ from optparse import OptionParser
 import src.gameplay as game
 
 
-
 def main():
 
     parser = OptionParser()
