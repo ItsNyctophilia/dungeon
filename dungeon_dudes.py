@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
 import src.room
-
+from src.menu import Menu
+from src.entity import Entity
+from src.monster import Monster
 
 class Menu:
     def __init__(self):
