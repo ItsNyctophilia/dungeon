@@ -17,3 +17,11 @@ def roll_initiative():
         return True
     else:
         return False
+
+
+def check_health(entity):
+    """Checks if the entity has reached 0 HP."""
+    if entity.hp == 0:
+        return True
+    else:
+        return False
