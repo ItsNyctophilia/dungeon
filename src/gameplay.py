@@ -9,3 +9,11 @@ def roll_dice(num_of_dice):
         result.append(random.randint(1, 6))
     result.sort(reverse=True)
     return result
+
+
+def roll_initiative():
+    """Rolls 1 d6 dice for initiative."""
+    if roll_dice(1) >= roll_dice(1):
+        return True
+    else:
+        return False
