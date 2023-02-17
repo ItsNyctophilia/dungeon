@@ -29,10 +29,7 @@ def main():
           main_menu, sep="")
 
     player = Hero()
-    player.add_treasure(src.treasure.get_treasure())
-    player.add_treasure(src.treasure.get_treasure())
-    player.add_treasure(src.treasure.get_treasure())
-    player.add_treasure(src.treasure.get_treasure())
+
     while (True):
         choice = input("> ")
         choice = choice.lower().strip()

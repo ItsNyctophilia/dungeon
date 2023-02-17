@@ -1,5 +1,6 @@
 from .treasure import Treasure
 
+
 class Entity:
     def __init__(self):
         self._hp = 0
@@ -36,8 +37,9 @@ class Entity:
 
     def add_treasure(self, treasure):
         """Add a treasure object to an entity's inventory.
-        
-        Returns True if successful and False if the action failed."""
+
+        Returns True if successful and False if the action failed
+        as a result of the object not being a Treasure."""
         if not isinstance(treasure, Treasure):
             return False
         elif treasure.name in self._treasure.keys():
@@ -48,8 +50,15 @@ class Entity:
         return True
 
     def del_treasure(self, treasure):
-        """Remove a treasure from an entity's inventory"""
-        self._treasure.append(treasure)
+        """Remove a treasure from an entity's inventory
+
+        Returns True if successful or if the item was not found
+        inside of the dictionary and False if the action failed
+        as a result of the object not being a Treasure."""
+        if not isinstance(treasure, Treasure):
+            return False
+        self._treasure.pop(treasure.name, None)
+        return True
 
     def hit(self):
         """Decrement HP if attack lands"""
