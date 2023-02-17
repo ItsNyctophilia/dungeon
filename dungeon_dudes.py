@@ -16,8 +16,8 @@ def main():
 
 
 if __name__ == "__main__":
-    try:
+    # try:
         main()
-    except (Exception, GeneratorExit, KeyboardInterrupt, SystemExit) as e:
-        name = type(e).__name__
-        print("Exception of type", name, "prevented program from continuing!")
+    # except (Exception, GeneratorExit, KeyboardInterrupt, SystemExit) as e:
+    #     name = type(e).__name__
+    #     print("Exception of type", name, "prevented program from continuing!")
