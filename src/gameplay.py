@@ -244,7 +244,16 @@ def play_game(flag):
 
 
 def fight_monster(player, room_, initiative, flag):
-    """Resolve a combat encounter with a randomly-selected enemy"""
+    """Resolve a combat encounter with a randomly-selected enemy
+
+    Keyword arguments:
+    player (Hero) -- the player's Hero object
+    room_ (Room) -- the Room object the player is in
+    initiative (bool)-- who attacks first in combat
+    flag (bool) -- whether or not to print dice rolls
+
+    Returns False if failed to generate a monster. Returns 0
+    if the player died or returns 1 if the monster died"""
     combat_menu = Menu()
     combat_menu.add_selection("Attack")
     combat_menu.add_selection("Investigate")
@@ -334,6 +343,15 @@ def fight_monster(player, room_, initiative, flag):
 
 
 def run_away(player, monster, flag):
+    """Allows the user to potentially run away from combat
+
+    Keyword arguments:
+    player (Hero) -- the player's Hero object
+    monster (Monster) -- the Monster object the player is attacking
+    flag (bool) -- whether or not to print dice rolls
+
+    Returns -1 if the player successfully ran away. Returns 0 if
+    the player died or returns 1 if the monster died."""
     random.seed()
     if random.randint(0, 100) < (player.hp * 10):
         print("Ran away!")
@@ -348,7 +366,6 @@ def run_away(player, monster, flag):
 
         if check == 1 or check == 0:
             return check
-
 
 
 def user_input():
