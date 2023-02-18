@@ -2,12 +2,13 @@
 import unittest
 from src.monster import Monster
 
+
 class TestEntity(unittest.TestCase):
 
     def setUp(self):
         name = "Test Name"
         description = "Test Description"
-        self.monster_= Monster(name, description)
+        self.monster_ = Monster(name, description)
         self.monster_.hp = 5
         self.monster_.dice = 3
 
