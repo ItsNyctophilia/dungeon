@@ -3,7 +3,7 @@ import unittest
 from src.monster import Monster
 
 
-class TestEntity(unittest.TestCase):
+class TestMonster(unittest.TestCase):
 
     def setUp(self):
         name = "Test Name"

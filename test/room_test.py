@@ -3,7 +3,7 @@ import unittest
 import src.room as room
 
 
-class TestEntity(unittest.TestCase):
+class TestRoom(unittest.TestCase):
 
     def setUp(self):
         description = "Test Room"
@@ -17,6 +17,7 @@ class TestEntity(unittest.TestCase):
     def test_room_generator(self):
         self.room_ = room.generate_room()
         self.assertTrue(self.room_)
+
 
 if __name__ == "__main__":
     unittest.main()

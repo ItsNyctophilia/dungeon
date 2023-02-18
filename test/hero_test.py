@@ -3,7 +3,7 @@ import unittest
 from src.hero import Hero
 
 
-class TestEntity(unittest.TestCase):
+class TestHero(unittest.TestCase):
 
     def setUp(self):
         self.hero_ = Hero()
