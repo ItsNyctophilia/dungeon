@@ -19,7 +19,7 @@ def roll_dice(num_of_dice):
 
 def roll_initiative():
     """Rolls 1 d6 dice for initiative."""
-    # If the 1st roll is higher than the 2nd the player wins initiative
+    # If the 1st roll is higher than the 2nd, the player wins initiative
     if roll_dice(1) >= roll_dice(1):
         return True
     else:
@@ -35,7 +35,9 @@ def check_health(entity):
 
 
 def check_hit(attacker, defender, flag):
-    """Compares the attackers rolls to the defenders rolls"""
+    """Compares the attacker's rolls to the defender's rolls
+
+    Returns True if the attacker lands a hit and False otherwise"""
     attack = roll_dice(attacker.dice)
     defense = roll_dice(defender.dice)
 
@@ -66,7 +68,17 @@ def check_hit(attacker, defender, flag):
 
 
 def combat(player, monster, initiative, flag, buff=False):
-    """Does 1 combat round"""
+    """Performs the calculations and updates for a round of combat
+
+    Keyword arguments:
+    player (Hero) -- the player's Hero object
+    monster (Monster) -- the Monster object the player is attacking
+    initiative (bool)-- who attacks first in combat
+    flag (bool) -- whether or not to print dice rolls
+    buff (bool) -- whether the player has the attack potion buff
+
+    Does not return anything."""
+
     # If the initiative is true that means the player attacks first.
     if buff:
         player.dice += 1
@@ -74,41 +86,41 @@ def combat(player, monster, initiative, flag, buff=False):
     if initiative:
         # Player attacks Monster
         if check_hit(player, monster, flag):
-            print("Bonked the Monster!")
+            print("You landed a hit!")
             monster.hit()
             if check_health(monster):
-                print("Monster died")
+                print("The enemy is slain.")
                 return 1
         else:
-            print("How did you miss?")
+            print("You missed!")
 
         # Monster attacks Player
         if check_hit(monster, player, flag):
-            print("You took the hit like a Champ!")
+            print("You were struck by the monster!")
             player.hit()
             if check_health(player):
                 return 0
         else:
-            print("The Monster might need some glasses!")
+            print("You avoided being hit.")
     else:
         # Monster attacks Player
         if check_hit(monster, player, flag):
-            print("You took the hit like a Champ!")
+            print("You were struck by the monster!")
             player.hit()
             if check_health(player):
                 return 0
         else:
-            print("The Monster might need some glasses!")
+            print("You avoided being hit.")
 
         # Player attacks Monster
         if check_hit(player, monster, flag):
-            print("Bonked the Monster!")
+            print("You landed a hit!")
             monster.hit()
             if check_health(monster):
-                print("Monster died")
+                print("The enemy is slain.")
                 return 1
         else:
-            print("How did you miss?")
+            print("You missed!")
 
 
 def play_game(flag):
@@ -136,23 +148,23 @@ def play_game(flag):
 
     while (True):
         print(main_menu, sep="")
-        
+
         choice = user_input()
-        if not choice:
+        if choice == -1:
+            print("Exiting...")
             return False
 
         if (choice == "explore" or choice == "1") and not fight_flag:
 
             room_ = room.generate_room()
-
             print(room.create_description_line(
-                  room_.description, room.get_flavor_line()))
+                  room_.description, room.get_flavor_line(room_.num_foes)))
             if room_.num_foes > 0:
                 initiative = roll_initiative()
                 main_menu.replace_selection("Fight", 0)
                 fight_flag = True
-        
-        elif (choice == "fight" or choice == "1") and fight_flag :
+
+        elif (choice == "fight" or choice == "1") and fight_flag:
 
             check = fight_monster(player, room_, initiative, flag)
             if check == 0:
@@ -161,8 +173,8 @@ def play_game(flag):
                 if not player.treasure:
                     print("Your bags were empty")
                 else:
-                    print("Inventory\n", player.get_treasure_printout())
-                print("Exiting....")
+                    print("Inventory:\n", player.get_treasure_printout())
+                print("Exiting...")
                 return False
 
             if not room_.treasure:
@@ -180,13 +192,13 @@ def play_game(flag):
             if room_.num_foes == 0:
                 main_menu.replace_selection("Explore", 0)
                 fight_flag = False
-        
+
         elif choice == "inventory" or choice == "2":
 
             if not player.treasure:
                 print("Your bags are empty")
             else:
-                print(player.get_treasure_printout())
+                print("Inventory:\n", player.get_treasure_printout(), sep="")
 
         elif choice == "status" or choice == "3":
 
@@ -194,15 +206,17 @@ def play_game(flag):
 
         elif choice == "quit" or choice == "4":
 
-            print("Exiting....")
+            print("Exiting...")
             return False
 
         elif (choice == "loot" or choice == "5") and shiny:
             print(room_.get_treasure_printout())
             while True:
-                print("Type the name of the item to loot or back.")
-                item = user_input(False)
-                if not item:
+                print("Type the name of the item to loot, or 'back' to",
+                      "return to the menu.")
+                item = user_input()
+                if item == -1:
+                    print("Exiting...")
                     return False
                 treasure_ = room_.get_treasure_object(item)
                 if item == "back":
@@ -225,6 +239,7 @@ def play_game(flag):
 
 
 def fight_monster(player, room_, initiative, flag):
+    """Resolve a combat encounter with a randomly-selected enemy"""
     combat_menu = Menu()
     combat_menu.add_selection("Attack")
     combat_menu.add_selection("Investigate")
@@ -243,15 +258,17 @@ def fight_monster(player, room_, initiative, flag):
         print("\nYour HP:", player.hp, "-", monster.name.strip("\""), "HP:",
               monster.hp)
         print(combat_menu)
-   
-        choice = user_input()
-        if not choice:
-            return False
+
+        choice = None
+        while not choice:
+            choice = user_input()
+            if choice == -1:
+                return False
 
         if choice == "attack" or choice == "1":
 
             check = combat(player, monster, initiative, flag, buff)
-
+            # Reset combat dice after combat
             if buff:
                 player.dice -= 1
                 buff = False
@@ -272,7 +289,7 @@ def fight_monster(player, room_, initiative, flag):
                 if player.has_treasure("Attack Potion"):
                     print("Want to use a potion? Yes/No")
                     potion = user_input()
-                    if not potion:
+                    if potion == -1:
                         return False
                     while True:
                         potion = potion.lower().strip()
@@ -286,7 +303,7 @@ def fight_monster(player, room_, initiative, flag):
                             print("Invalid Input")
                             print("Yes or No")
                             potion = user_input()
-                            if not potion:
+                            if potion == -1:
                                 return False
                             continue
 
@@ -298,29 +315,17 @@ def fight_monster(player, room_, initiative, flag):
 
             print("Unrecognized command")
 
-def user_input(case=True):
+
+def user_input():
+    """Returns sanitized user input or -1 if program should exit"""
 
     while True:
         try:
             choice = input("> ")
+            if not choice:
+                continue
             break
         except (KeyboardInterrupt, EOFError):
-            try:
-                user = input("\nAre you sure you want to quit? Y/N >")
-                user.lower().strip()
-                while True:
-                    if user == "y":
-                        return False
-                    elif user == "n":
-                        break
-                    else:
-                        user = input("Y/N >")
-                        continue
-            except (KeyboardInterrupt, EOFError):
-                print("")
-                return False
+            return -1
 
-    if case:      
-        choice = choice.lower().strip()
-
-    return choice
+    return choice.lower().strip()
