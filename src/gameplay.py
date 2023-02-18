@@ -136,8 +136,10 @@ def play_game(flag):
 
     while (True):
         print(main_menu, sep="")
-        choice = input("> ")
-        choice = choice.lower().strip()
+        
+        choice = user_input()
+        if not choice:
+            return False
 
         if (choice == "explore" or choice == "1") and not fight_flag:
 
@@ -154,7 +156,8 @@ def play_game(flag):
 
             check = fight_monster(player, room_, initiative, flag)
             if check == 0:
-                print("You died!")
+                if player.hp == 0:
+                    print("You died!")
                 if not player.treasure:
                     print("Your bags were empty")
                 else:
@@ -197,7 +200,10 @@ def play_game(flag):
         elif (choice == "loot" or choice == "5") and shiny:
             print(room_.get_treasure_printout())
             while True:
-                item = input("Type the name of the item to loot or back: ")
+                print("Type the name of the item to loot or back.")
+                item = user_input(False)
+                if not item:
+                    return False
                 treasure_ = room_.get_treasure_object(item)
                 if item == "back":
                     break
@@ -237,8 +243,10 @@ def fight_monster(player, room_, initiative, flag):
         print("\nYour HP:", player.hp, "-", monster.name.strip("\""), "HP:",
               monster.hp)
         print(combat_menu)
-        choice = input("> ")
-        choice = choice.lower().strip()
+   
+        choice = user_input()
+        if not choice:
+            return False
 
         if choice == "attack" or choice == "1":
 
@@ -262,7 +270,10 @@ def fight_monster(player, room_, initiative, flag):
             else:
                 print(player.get_treasure_printout())
                 if player.has_treasure("Attack Potion"):
-                    potion = input("Want to use a potion? Yes/No: ")
+                    print("Want to use a potion? Yes/No")
+                    potion = user_input()
+                    if not potion:
+                        return False
                     while True:
                         potion = potion.lower().strip()
                         if potion == "yes":
@@ -273,7 +284,10 @@ def fight_monster(player, room_, initiative, flag):
                             break
                         else:
                             print("Invalid Input")
-                            potion = input("Yes/No: ")
+                            print("Yes or No")
+                            potion = user_input()
+                            if not potion:
+                                return False
                             continue
 
         elif choice == "status" or choice == "4":
@@ -283,3 +297,30 @@ def fight_monster(player, room_, initiative, flag):
         else:
 
             print("Unrecognized command")
+
+def user_input(case=True):
+
+    while True:
+        try:
+            choice = input("> ")
+            break
+        except (KeyboardInterrupt, EOFError):
+            try:
+                user = input("\nAre you sure you want to quit? Y/N >")
+                user.lower().strip()
+                while True:
+                    if user == "y":
+                        return False
+                    elif user == "n":
+                        break
+                    else:
+                        user = input("Y/N >")
+                        continue
+            except (KeyboardInterrupt, EOFError):
+                print("")
+                return False
+
+    if case:      
+        choice = choice.lower().strip()
+
+    return choice
