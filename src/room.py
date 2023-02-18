@@ -72,7 +72,7 @@ class Room:
 
         for item in self._treasure:
             # Index 0 is the name and index 1 is the object reference
-            if treasure_name == item[0]:
+            if treasure_name.lower() == item[0]:
                 return item[1]
         return None
 
@@ -85,7 +85,7 @@ class Room:
         # Ex. "1x Sword of Swording, It looks very sharp."
         for item in self._treasure:
             # Index 0 is the name of the treasure
-            printout.append("".join(item[0]))
+            printout.append("".join(item[0]).capitalize())
         return "\n".join(printout)
 
     def add_treasure(self, new_treasure):
@@ -95,7 +95,7 @@ class Room:
         due to the object to be added not being a Treasure"""
         if not isinstance(new_treasure, Treasure):
             return False
-        self._treasure.append([new_treasure.name, new_treasure])
+        self._treasure.append([new_treasure.name.lower(), new_treasure])
         return True
 
     def del_treasure(self, treasure):
@@ -105,9 +105,9 @@ class Room:
         or if the object to be removed was not a Treasure."""
         if not isinstance(treasure, Treasure):
             return False
-        if [treasure.name, treasure] not in self._treasure:
+        if [treasure.name.lower(), treasure] not in self._treasure:
             return False
-        self._treasure.remove([treasure.name, treasure])
+        self._treasure.remove([treasure.name.lower(), treasure])
         return True
 
 

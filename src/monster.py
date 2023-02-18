@@ -3,7 +3,9 @@
 Contains Monster class for the creation of entities that require
 names and descriptions. Contains method for generation of monster
 based on select input files."""
+
 import random
+import textwrap
 import os
 from .entity import Entity
 
@@ -75,7 +77,7 @@ class Monster(Entity):
                 index = random.randint(0, len(lines)-1)
                 continue
 
-        monster = Monster(name, description)
+        monster = Monster(name, textwrap.fill(description).strip("\" "))
         monster._hp = hp
         monster._dice = dice
         return monster

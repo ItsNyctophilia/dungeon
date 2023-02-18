@@ -89,7 +89,7 @@ def combat(player, monster, initiative, flag, buff=False):
             print("You landed a hit!")
             monster.hit()
             if check_health(monster):
-                print("The enemy is slain.")
+                print("The enemy is slain.\n")
                 return 1
         else:
             print("You missed!")
@@ -117,7 +117,7 @@ def combat(player, monster, initiative, flag, buff=False):
             print("You landed a hit!")
             monster.hit()
             if check_health(monster):
-                print("The enemy is slain.")
+                print("The enemy is slain.\n")
                 return 1
         else:
             print("You missed!")
@@ -173,7 +173,8 @@ def play_game(flag):
                 if not player.treasure:
                     print("Your bags were empty")
                 else:
-                    print("Inventory:\n", player.get_treasure_printout())
+                    print("Inventory:\n", player.get_treasure_printout(),
+                          "\n", sep="")
                 print("Exiting...")
                 return False
 
@@ -187,9 +188,9 @@ def play_game(flag):
                     main_menu.add_selection("Loot")
 
             room_.num_foes -= 1
-
-            print(room_.num_foes, "Monsters left!")
-            if room_.num_foes == 0:
+            if room_.num_foes != 0:
+                print(room_.num_foes, "Monsters left!\n")
+            elif room_.num_foes == 0:
                 main_menu.replace_selection("Explore", 0)
                 fight_flag = False
 
@@ -198,7 +199,8 @@ def play_game(flag):
             if not player.treasure:
                 print("Your bags are empty")
             else:
-                print("Inventory:\n", player.get_treasure_printout(), sep="")
+                print("Inventory:\n", player.get_treasure_printout(),
+                      "\n", sep="")
 
         elif choice == "status" or choice == "3":
 
@@ -210,7 +212,8 @@ def play_game(flag):
             return False
 
         elif (choice == "loot" or choice == "5") and shiny:
-            print(room_.get_treasure_printout())
+            print("On the floor are the following items:\n",
+                  room_.get_treasure_printout(), "\n", sep="")
             while True:
                 print("Type the name of the item to loot, or 'back' to",
                       "return to the menu.")
@@ -218,6 +221,7 @@ def play_game(flag):
                 if item == -1:
                     print("Exiting...")
                     return False
+                item = item.lower().strip()
                 treasure_ = room_.get_treasure_object(item)
                 if item == "back":
                     break
@@ -285,7 +289,8 @@ def fight_monster(player, room_, initiative, flag):
             if not player.treasure:
                 print("Your bags are empty")
             else:
-                print(player.get_treasure_printout())
+                print("Inventory:\n", player.get_treasure_printout(),
+                      "\n", sep="")
                 if player.has_treasure("Attack Potion"):
                     print("Want to use a potion? Yes/No")
                     potion = user_input()
