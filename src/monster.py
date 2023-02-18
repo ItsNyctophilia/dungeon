@@ -64,7 +64,7 @@ class Monster(Entity):
             with open("src/.dd_monsters") as file:
                 file.readline()
                 lines = file.readlines()
-        
+
         if len(lines) == 0:
             print("Empty Monster File. Could not generate a monster!")
             return -1
