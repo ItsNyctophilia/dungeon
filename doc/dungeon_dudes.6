@@ -1,0 +1,22 @@
+.TH dungeon_dudes 6 "February 2023" "1.0" "dungeon dudes manual"
+.SH NAME
+dungeon dudes - basic dungeon-crawling text adventure
+.SH SYNOPSIS
+.B dungeon_dudes.py [-d]
+.SH DESCRIPTION
+dungeon_dudes.py is a game in the style of Zork and other text adventures that allows the player to explore, fight monsters, and acquire treasure. The player can provide the name or the number associated with each in-game command such as "1" or "explore" in order to perform that action. 
+
+In each room, there will either be an option to fight a random number of monsters or "explore", taking the player to the next room. When in combat, the player and the monster take turns attacking by high-rolling dice equal to their default dice amount and cancelling-out ties. If the attacker wins the roll, the defender takes a point of damage, otherwise the attack is a miss. The player may additionally run away to safety or drink an "Attack Potion" to increase the number of dice they roll in the next round by one.
+
+After combat, the player has the option to pick up any treasure items that randomly drop from defeated monsters. The game ends when the player dies.
+
+In the user's home directory, an optional ~/.dd_monsters file can be provided to override the game's default list of monsters. The format for this is: "Name; Description; HP; Dice", where "Dice" is how many dice the monster rolls during combat.
+.SH OPTIONS
+The following options are available:
+.TP
+.B -d
+Prints out all dice rolls for each round of combat.
+.SH EXAMPLES
+To play the game with explicitly-shown dice rolls:
+.TP
+.B $ dungeon_dudes.py -d
