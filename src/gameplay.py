@@ -65,57 +65,57 @@ def check_hit(attacker, defender, flag):
         return False
 
 
-def combat(player, monster, initiative, flag):
-    """Loops through the combat until someone dies."""
-    # TODO: End the program if the player dies
-    while True:
-        print("Your HP:", player.hp, "-", monster.name, "HP:", monster.hp)
-        # If the initiative is true that means the player attacks first.
-        if initiative:
-            # Player attacks Monster
-            if check_hit(player, monster, flag):
-                print("Bonked the Monster!")
-                monster.hit()
-                if check_health(monster):
-                    print("Monster died")
-                    return True
-            else:
-                print("How did you miss?")
+def combat(player, monster, initiative, flag, buff=False):
+    """Does 1 combat round"""
+    # If the initiative is true that means the player attacks first.
+    if buff:
+        player.dice += 1
 
-            # Monster attacks Player
-            if check_hit(monster, player, flag):
-                print("You took the hit like a Champ!")
-                player.hit()
-                if check_health(player):
-                    return False
-            else:
-                print("The Monster might need some glasses!")
+    if initiative:
+        # Player attacks Monster
+        if check_hit(player, monster, flag):
+            print("Bonked the Monster!")
+            monster.hit()
+            if check_health(monster):
+                print("Monster died")
+                return 1
         else:
-            # Monster attacks Player
-            if check_hit(monster, player, flag):
-                print("You took the hit like a Champ!")
-                player.hit()
-                if check_health(player):
-                    return False
-            else:
-                print("The Monster might need some glasses!")
+            print("How did you miss?")
 
-            # Player attacks Monster
-            if check_hit(player, monster, flag):
-                print("Bonked the Monster!")
-                monster.hit()
-                if check_health(monster):
-                    print("Monster died")
-                    return True
-            else:
-                print("How did you miss?")
+        # Monster attacks Player
+        if check_hit(monster, player, flag):
+            print("You took the hit like a Champ!")
+            player.hit()
+            if check_health(player):
+                return 0
+        else:
+            print("The Monster might need some glasses!")
+    else:
+        # Monster attacks Player
+        if check_hit(monster, player, flag):
+            print("You took the hit like a Champ!")
+            player.hit()
+            if check_health(player):
+                return 0
+        else:
+            print("The Monster might need some glasses!")
+
+        # Player attacks Monster
+        if check_hit(player, monster, flag):
+            print("Bonked the Monster!")
+            monster.hit()
+            if check_health(monster):
+                print("Monster died")
+                return 1
+        else:
+            print("How did you miss?")
 
 
 def play_game(flag):
     """Function that plays Dungeon Dudes"""
     main_menu = Menu()
-    main_menu.add_selection("Inventory")
     main_menu.add_selection("Explore")
+    main_menu.add_selection("Inventory")
     main_menu.add_selection("Status")
     main_menu.add_selection("Quit")
 
@@ -130,48 +130,197 @@ def play_game(flag):
          "rainwater dripping from the canopy above. Seeing no other " \
          "option, you bring yourself forward and grab ahold of it, " \
          "beginning your journey out of this blackened bog."
-    print(room.create_description_line(ip, room.get_flavor_line()),
-          main_menu, sep="")
+    print(room.create_description_line(ip, room.get_flavor_line()))
 
-    player.add_treasure(treasure.get_treasure())
-    player.add_treasure(treasure.get_treasure())
-    player.add_treasure(treasure.get_treasure())
+    fight_flag = False
+
     while (True):
-        choice = input("> ")
-        choice = choice.lower().strip()
-        if choice == "inventory":
+        print(main_menu, sep="")
+        
+        choice = user_input()
+        if not choice:
+            return False
+
+        if (choice == "explore" or choice == "1") and not fight_flag:
+
+            room_ = room.generate_room()
+
+            print(room.create_description_line(
+                  room_.description, room.get_flavor_line()))
+            if room_.num_foes > 0:
+                initiative = roll_initiative()
+                main_menu.replace_selection("Fight", 0)
+                fight_flag = True
+        
+        elif (choice == "fight" or choice == "1") and fight_flag :
+
+            check = fight_monster(player, room_, initiative, flag)
+            if check == 0:
+                if player.hp == 0:
+                    print("You died!")
+                if not player.treasure:
+                    print("Your bags were empty")
+                else:
+                    print("Inventory\n", player.get_treasure_printout())
+                print("Exiting....")
+                return False
+
+            if not room_.treasure:
+                shiny = False
+                if main_menu.has_selection("Loot"):
+                    main_menu.del_selection("Loot")
+            else:
+                shiny = True
+                if not main_menu.has_selection("Loot"):
+                    main_menu.add_selection("Loot")
+
+            room_.num_foes -= 1
+
+            print(room_.num_foes, "Monsters left!")
+            if room_.num_foes == 0:
+                main_menu.replace_selection("Explore", 0)
+                fight_flag = False
+        
+        elif choice == "inventory" or choice == "2":
 
             if not player.treasure:
                 print("Your bags are empty")
             else:
                 print(player.get_treasure_printout())
 
-        elif choice == "explore":
-
-            room_ = room.generate_room()
-            room_.add_treasure(treasure.get_treasure())
-            room_.add_treasure(treasure.get_treasure())
-            print(room_.get_treasure_printout())
-            item = input("Pick up an item please: ")
-            player.add_treasure(room_.get_treasure_object(item))
-            room_.del_treasure(item)
-
-            print(room.create_description_line(
-                  room_.description, room.get_flavor_line()))
-            # while room_.num_foes > 0:
-            #     if not clear_room(player, room_, flag):
-            #         return False
-            print(main_menu, sep="")
-
-        elif choice == "status":
+        elif choice == "status" or choice == "3":
 
             print("Current Health:", player.hp)
 
-        elif choice == "quit":
+        elif choice == "quit" or choice == "4":
 
             print("Exiting....")
             return False
 
+        elif (choice == "loot" or choice == "5") and shiny:
+            print(room_.get_treasure_printout())
+            while True:
+                print("Type the name of the item to loot or back.")
+                item = user_input(False)
+                if not item:
+                    return False
+                treasure_ = room_.get_treasure_object(item)
+                if item == "back":
+                    break
+                elif treasure_ is None:
+                    print("Invalid item name!")
+                    continue
+                else:
+                    player.add_treasure(treasure_)
+                    room_.del_treasure(treasure_)
+                    if not room_.treasure:
+                        if main_menu.has_selection("Loot"):
+                            main_menu.del_selection("Loot")
+                    print(f'{treasure_.name} picked up!')
+                    break
+
         else:
 
             print("Unrecognized command")
+
+
+def fight_monster(player, room_, initiative, flag):
+    combat_menu = Menu()
+    combat_menu.add_selection("Attack")
+    combat_menu.add_selection("Investigate")
+    combat_menu.add_selection("Inventory")
+    combat_menu.add_selection("Status")
+
+    monster = Monster.generate_monster()
+
+    if random.randint(0, 100) < (monster.hp + monster.dice) * 10:
+        room_.add_treasure(treasure.get_treasure())
+
+    buff = False
+
+    print(monster.description)
+    while (True):
+        print("\nYour HP:", player.hp, "-", monster.name.strip("\""), "HP:",
+              monster.hp)
+        print(combat_menu)
+   
+        choice = user_input()
+        if not choice:
+            return False
+
+        if choice == "attack" or choice == "1":
+
+            check = combat(player, monster, initiative, flag, buff)
+
+            if buff:
+                player.dice -= 1
+                buff = False
+
+            if check == 1 or check == 0:
+                return check
+
+        elif choice == "investigate" or choice == "2":
+
+            print("Monster Health:", monster.hp)
+
+        elif choice == "inventory" or choice == "3":
+
+            if not player.treasure:
+                print("Your bags are empty")
+            else:
+                print(player.get_treasure_printout())
+                if player.has_treasure("Attack Potion"):
+                    print("Want to use a potion? Yes/No")
+                    potion = user_input()
+                    if not potion:
+                        return False
+                    while True:
+                        potion = potion.lower().strip()
+                        if potion == "yes":
+                            print("Plus 1 dice on your next attack!")
+                            buff = True
+                            break
+                        elif potion == "no":
+                            break
+                        else:
+                            print("Invalid Input")
+                            print("Yes or No")
+                            potion = user_input()
+                            if not potion:
+                                return False
+                            continue
+
+        elif choice == "status" or choice == "4":
+
+            print("Current Health:", player.hp)
+
+        else:
+
+            print("Unrecognized command")
+
+def user_input(case=True):
+
+    while True:
+        try:
+            choice = input("> ")
+            break
+        except (KeyboardInterrupt, EOFError):
+            try:
+                user = input("\nAre you sure you want to quit? Y/N >")
+                user.lower().strip()
+                while True:
+                    if user == "y":
+                        return False
+                    elif user == "n":
+                        break
+                    else:
+                        user = input("Y/N >")
+                        continue
+            except (KeyboardInterrupt, EOFError):
+                print("")
+                return False
+
+    if case:      
+        choice = choice.lower().strip()
+
+    return choice

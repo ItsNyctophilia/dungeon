@@ -10,7 +10,7 @@ class Monster(Entity):
         self._description = description
 
     def __str__(self):
-        return f'{self._name}: {self._description} {self._hp} {self._dice}'
+        return f'{self._name}: {self._description}\n HP:{self._hp}'
 
     @property
     def name(self):
@@ -25,17 +25,30 @@ class Monster(Entity):
     @staticmethod
     def generate_monster():
         random.seed()
-        # TODO: Change to read from Home Directory.
         home_directory = os.path.expanduser('~')
         path = os.path.join(home_directory, '.dd_monsters')
-        with open(path) as file:
-            file.readline()
-            lines = file.readlines()
+        try: 
+            with open(path) as file:
+                file.readline()
+                lines = file.readlines()
+        except FileNotFoundError:
+            print("\nCould not find monster file in home directory!")
+            print("Reading .dd_monsters in src folder.\n")
+            with open("src/.dd_monsters") as file:
+                file.readline()
+                lines = file.readlines()
 
         index = random.randint(0, len(lines)-1)
-        name, description, hp, dice = lines[index].rstrip().split(";")
-        hp = int(hp)
-        dice = int(dice)
+        while True:
+            try:
+                name, description, hp, dice = lines[index].rstrip().split(";")
+                hp = int(hp)
+                dice = int(dice)
+                break
+            except ValueError:
+                # ignore the line
+                index = random.randint(0, len(lines)-1)
+                continue 
 
         monster = Monster(name, description)
         monster._hp = hp
