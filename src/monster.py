@@ -64,8 +64,13 @@ class Monster(Entity):
             with open("src/.dd_monsters") as file:
                 file.readline()
                 lines = file.readlines()
+        
+        if len(lines) == 0:
+            print("Empty Monster File. Could not generate a monster!")
+            return -1
 
         index = random.randint(0, len(lines)-1)
+        checker = 0
         while True:
             try:
                 name, description, hp, dice = lines[index].rstrip().split(";")
@@ -74,6 +79,10 @@ class Monster(Entity):
                 break
             except ValueError:
                 # ignore the line
+                if checker == len(lines):
+                    print("No Valid Monsters in the Monster File!")
+                    return -1
+                checker += 1
                 index = random.randint(0, len(lines)-1)
                 continue
 

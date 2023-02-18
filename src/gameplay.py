@@ -252,6 +252,9 @@ def fight_monster(player, room_, initiative, flag):
 
     monster = Monster.generate_monster()
 
+    if monster == -1:
+        return False
+
     if random.randint(0, 100) < (monster.hp + monster.dice) * 10:
         room_.add_treasure(treasure.get_treasure())
 
@@ -331,6 +334,23 @@ def user_input():
                 continue
             break
         except (KeyboardInterrupt, EOFError):
-            return -1
+            if KeyboardInterrupt:
+                print("\nAre you sure you want to quit? Yes/No")
+                while True:
+                    try:
+                        choice = input("> ")
+                        if not choice:
+                            break
+                    except (KeyboardInterrupt, EOFError):
+                        return -1
+                    choice.lower().strip()
+                    if choice == "yes" or choice == "y":
+                        return -1
+                    elif choice == "no" or choice == "n":
+                        break
+                    else:
+                        print("Invalid Input!")
+            else:
+                return -1
 
     return choice.lower().strip()
