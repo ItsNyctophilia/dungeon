@@ -161,6 +161,8 @@ def play_game(flag):
                   room_.description, room.get_flavor_line(room_.num_foes)))
             if room_.num_foes > 0:
                 initiative = roll_initiative()
+                if initiative:
+                    print("You have won initiative!")
                 main_menu.replace_selection("Fight", 0)
                 fight_flag = True
 
@@ -168,8 +170,7 @@ def play_game(flag):
 
             check = fight_monster(player, room_, initiative, flag)
             if check == 0:
-                if player.hp == 0:
-                    print("You died!")
+                print("You died!")
                 if not player.treasure:
                     print("Your bags were empty")
                 else:
@@ -190,7 +191,7 @@ def play_game(flag):
             room_.num_foes -= 1
             if room_.num_foes != 0:
                 print(room_.num_foes, "Monsters left!\n")
-            elif room_.num_foes == 0:
+            elif room_.num_foes == 0 or check == -1:
                 main_menu.replace_selection("Explore", 0)
                 fight_flag = False
 
@@ -249,12 +250,14 @@ def fight_monster(player, room_, initiative, flag):
     combat_menu.add_selection("Investigate")
     combat_menu.add_selection("Inventory")
     combat_menu.add_selection("Status")
+    combat_menu.add_selection("Run Away")
 
     monster = Monster.generate_monster()
 
     if monster == -1:
         return False
 
+    random.seed()
     if random.randint(0, 100) < (monster.hp + monster.dice) * 10:
         room_.add_treasure(treasure.get_treasure())
 
@@ -319,9 +322,33 @@ def fight_monster(player, room_, initiative, flag):
 
             print("Current Health:", player.hp)
 
+        elif choice == "run away" or choice == "5":
+
+            check = run_away(player, monster, flag)
+            if check == 1 or check == 0 or check == -1:
+                return check
+
         else:
 
             print("Unrecognized command")
+
+
+def run_away(player, monster, flag):
+    random.seed()
+    if random.randint(0, 100) < (player.hp * 10):
+        print("Ran away!")
+        return -1
+    else:
+        print("Failed to get away!")
+        initiative = False
+        player.dice = 1
+        check = combat(player, monster, initiative, flag)
+        # Reset combat dice after combat
+        player.dice = 3
+
+        if check == 1 or check == 0:
+            return check
+
 
 
 def user_input():
