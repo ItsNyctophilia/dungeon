@@ -170,7 +170,8 @@ def play_game(flag):
 
             check = fight_monster(player, room_, initiative, flag)
             if check == 0:
-                print("You died!")
+                if player.hp == 0:
+                    print("You died!")
                 if not player.treasure:
                     print("Your bags were empty")
                 else:
@@ -189,11 +190,11 @@ def play_game(flag):
                     main_menu.add_selection("Loot")
 
             room_.num_foes -= 1
-            if room_.num_foes != 0:
-                print(room_.num_foes, "Monsters left!\n")
-            elif room_.num_foes == 0 or check == -1:
+            if room_.num_foes == 0 or check == -1:
                 main_menu.replace_selection("Explore", 0)
                 fight_flag = False
+            elif room_.num_foes != 0:
+                print(room_.num_foes, "Monsters left!\n")
 
         elif choice == "inventory" or choice == "2":
 
@@ -313,11 +314,12 @@ def fight_monster(player, room_, initiative, flag):
                         return False
                     while True:
                         potion = potion.lower().strip()
-                        if potion == "yes":
+                        if potion == "yes" or potion == "y":
                             print("Plus 1 dice on your next attack!")
+                            player.del_treasure("Attack Potion")
                             buff = True
                             break
-                        elif potion == "no":
+                        elif potion == "no" or potion == "n":
                             break
                         else:
                             print("Invalid Input")
@@ -378,22 +380,22 @@ def user_input():
                 continue
             break
         except (KeyboardInterrupt, EOFError):
-            if KeyboardInterrupt:
-                print("\nAre you sure you want to quit? Yes/No")
-                while True:
-                    try:
-                        choice = input("> ")
-                        if not choice:
-                            break
-                    except (KeyboardInterrupt, EOFError):
-                        return -1
-                    choice.lower().strip()
-                    if choice == "yes" or choice == "y":
-                        return -1
-                    elif choice == "no" or choice == "n":
-                        break
-                    else:
-                        print("Invalid Input!")
+            print("\nAre you sure you want to quit? Yes/No")
+            while True:
+                try:
+                    choice = input("> ")
+                    if not choice:
+                        continue
+                except (KeyboardInterrupt, EOFError):
+                    return -1
+                choice = choice.lower().strip()
+                if choice == "yes" or choice == "y":
+                    return -1
+                elif choice == "no" or choice == "n":
+                    print("Continuing game...")
+                    break
+                else:
+                    print("Invalid Input!")
             else:
                 return -1
 

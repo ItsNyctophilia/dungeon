@@ -96,15 +96,8 @@ class Entity:
         return True
 
     def del_treasure(self, treasure):
-        """Remove a treasure from an entity's inventory.
-
-        Returns True if successful or if the item was not found
-        inside of the dictionary and False if the action failed
-        as a result of the object not being a Treasure."""
-        if not isinstance(treasure, Treasure):
-            return False
-        self._treasure.pop(treasure.name, None)
-        return True
+        """Remove a treasure from an entity's inventory."""
+        self._treasure.pop(treasure, None)
 
     def has_treasure(self, treasure_name):
         """Checks if the entity's inventory contains the treasure.
