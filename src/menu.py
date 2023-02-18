@@ -1,4 +1,28 @@
+"""Create "Menu" objects that contain a multiple selection items.
+
+Contains Menu class and related functions for the creation and
+manipulation of generic menus."""
+
+
 class Menu:
+    """A class for the creation of menus
+
+    Attributes
+    ----------
+    selections : list
+        one of the selectable menu items
+
+    Methods
+    -------
+    has_selection(selection):
+        check if selection is in menu
+    add_selection(new_selection):
+        add given selection to menu
+    del_selection(selection):
+        remove selection from menu
+    replace_selection(new_selection, index):
+        replace menu selection at index with new_selection"""
+
     def __init__(self):
         self._selections = []
 
@@ -25,7 +49,7 @@ class Menu:
     def del_selection(self, selection):
         """Remove the given selection from the menu"""
         self._selections.remove(selection)
-    
+
     def replace_selection(self, new_selection, index):
-        """Add the given selection to the menu"""
+        """Replaces the menu item at index"""
         self._selections[index] = new_selection

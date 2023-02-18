@@ -1,7 +1,37 @@
+"""Create "Entity" objects that have hp, dice, and inventories.
+
+Contains methods for the getting and setting of hp and dice values
+as well as the addition of, removal of, state-checking of, and
+pretty-printing of the Entity's inventory."""
+
 from .treasure import Treasure
 
 
 class Entity:
+    """A class to represent a living entity.
+
+    Attributes
+    ----------
+    hp : int
+        health of an entity
+    dice : int
+        number of dice entity rolls in combat
+    treasure : dict
+        entity's inventory containing treasure objects
+
+    Methods
+    -------
+    get_treasure_printout():
+        returns a formatted string of the inventory
+    add_treasure(treasure):
+        adds the given treasure object to the inventory
+    del_treasure(treasure):
+        removes the given treasure object from the inventory
+    has_treasure(treasure):
+        checks if treasure object exists in inventory
+    hit():
+        subtracts 1 hp from entity's helath"""
+
     def __init__(self):
         self._hp = 0
         self._dice = 0
@@ -66,7 +96,7 @@ class Entity:
         return True
 
     def del_treasure(self, treasure):
-        """Remove a treasure from an entity's inventory
+        """Remove a treasure from an entity's inventory.
 
         Returns True if successful or if the item was not found
         inside of the dictionary and False if the action failed
@@ -77,7 +107,7 @@ class Entity:
         return True
 
     def has_treasure(self, treasure_name):
-        """Checks if the entity's inventory contains the treasure
+        """Checks if the entity's inventory contains the treasure.
 
         Returns True if successful or if the item was not found
         inside of the dictionary and False if the action failed
@@ -87,5 +117,7 @@ class Entity:
         return False
 
     def hit(self):
-        """Decrement HP if attack lands"""
+        """Decrement hp by one.
+
+        For use during game combat when attack lands."""
         self._hp -= 1

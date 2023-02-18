@@ -1,9 +1,37 @@
+"""Create "Room" objects that contain enemies and treasure.
+
+Contains the Room class for the creation of environments with
+descriptions, a number of enemies held within, and any treasure
+in the room's inventory that can be looted by the player."""
+
 import random
 import textwrap
 from .treasure import Treasure
 
 
 class Room:
+    """A class to represent an explorable room.
+
+    Attributes
+    ----------
+    description : str
+        description of the room
+    num_foes : int
+        number of enemies in the room
+    treasure : list
+        list of treasure in the room, on the floor
+
+    Methods
+    -------
+    get_treasure_object(treasure_name):
+        returns the first treasure object associated with given name
+    get_treasure_printout():
+        returns a formatted string of the room's treasure
+    add_treasure(new_treasure):
+        adds treasure to room
+    del_treasure
+        removes treasure from room"""
+
     def __init__(self, description, num_foes=-1):
         self._description = description
         self._num_foes = num_foes
@@ -44,19 +72,20 @@ class Room:
 
         for item in self._treasure:
             # Index 0 is the name and index 1 is the object reference
-            if treasure_name == item[0]:
+            if treasure_name.lower() == item[0]:
                 return item[1]
         return None
 
     def get_treasure_printout(self):
         """Returns a formatted string of the entity's inventory"""
+
         printout = []
 
         # "Format: [number]x [item], [description]\n"
         # Ex. "1x Sword of Swording, It looks very sharp."
         for item in self._treasure:
             # Index 0 is the name of the treasure
-            printout.append("".join(item[0]))
+            printout.append("".join(item[0]).capitalize())
         return "\n".join(printout)
 
     def add_treasure(self, new_treasure):
@@ -66,7 +95,7 @@ class Room:
         due to the object to be added not being a Treasure"""
         if not isinstance(new_treasure, Treasure):
             return False
-        self._treasure.append([new_treasure.name, new_treasure])
+        self._treasure.append([new_treasure.name.lower(), new_treasure])
         return True
 
     def del_treasure(self, treasure):
@@ -76,13 +105,14 @@ class Room:
         or if the object to be removed was not a Treasure."""
         if not isinstance(treasure, Treasure):
             return False
-        if [treasure.name, treasure] not in self._treasure:
+        if [treasure.name.lower(), treasure] not in self._treasure:
             return False
-        self._treasure.remove([treasure.name, treasure])
+        self._treasure.remove([treasure.name.lower(), treasure])
         return True
 
 
 def get_description():
+    """Returns one of four descriptions for a room."""
     p1 = "As you trudge onwards, enduring the scrapes of brambled " \
          "overgrowth and pushing past the ruins of buildings lost to " \
          "time, you can feel a gentle rain coming from overhead. Just " \
@@ -118,14 +148,24 @@ def get_description():
     return random.choice(prompts)
 
 
-def get_flavor_line():
+def get_flavor_line(combat=False):
     """Randomly selects a flavor line that follows a description."""
-    end_string = ["You couldn't be any wetter.", "It's time to move on.",
-                  "There's nothing left for you here.",
-                  "Forward is the only way.",
-                  "Just standing here gives you the creeps.",
-                  "No rest for the wicked.",
-                  "It would probably be best for you to go."]
+    end_string = None
+    if not combat:
+        end_string = ["You couldn't be any wetter.",
+                      "It's time to move on.",
+                      "There's nothing left for you here.",
+                      "Forward is the only way.",
+                      "Just standing here gives you the creeps.",
+                      "No rest for the wicked.",
+                      "It would probably be best for you to go."]
+    else:
+        end_string = ["Something wicked this way comes.",
+                      "Your keen senses alert you to danger nearby.",
+                      "You're not alone here, yet.",
+                      "You'll have to clear the area to progress.",
+                      "Look alive; you have company."]
+
     return random.choice(end_string)
 
 
@@ -138,7 +178,7 @@ def generate_room(num_foes=-1):
     """Randomly generates a room object to be explored by the player
 
     Keyword arguments:
-    num_foes -- an optional number of enemies for the room
+    num_foes (int) -- an optional number of enemies for the room
 
     Returns a room object."""
     random.seed()

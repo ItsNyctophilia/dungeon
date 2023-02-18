@@ -1,7 +1,21 @@
+"""Create "Treasure" objects that contain a name and description
+
+Contains Treasure class and a function for the generation of
+one of several default treasures."""
+
 import random
 
 
 class Treasure:
+    """A class to represent treasure.
+
+    Attributes
+    ----------
+    name : str
+        name of the item
+    description : str
+        description of the item"""
+
     def __init__(self, name, description):
         self._name = name
         self._description = description
@@ -21,6 +35,7 @@ class Treasure:
 
 
 def get_treasure():
+    """Returns a treasure object for use as a lootable item"""
     t1 = ["Attack Potion", "A crimson draught that swirls with energy."]
     t2 = ["Tarnished Heirloom", "A relic of some royal family lost to time."]
     t3 = ["Waterlogged Boot", "Not much dryer than the ones you have on."]
