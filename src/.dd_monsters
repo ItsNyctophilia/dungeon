@@ -1,6 +1,6 @@
 Name; Description; HP; Dice
 "Behemoth"; "A massive horned creature looms over you, baring its sharp fangs. It appears ready to attack!"; 3; 3
-"Nightmare"; "A tall, ugly old woman looks down at you menacingly. She draws back her long claws and prepares to slash at you!"; 2; 2
-"Dragon Slayer Ornstein"; "A regal-looking man in expensive armors appears before you. You can't see the face behind his lion-shaped helmet, but you're sure he's challenging you to a duel."; 2; 3
-"Dullahan"; "A shadow appears in front of you, appearing to be a man on horseback. Once you get closer, you realize that he has no head, he's armed, and he's charging straight towards you, sword raised!"; 3; 2
-"Cave Screamer"; "An undead creature hobbles toward you, dragging its broken leg behind it. You smell the stench of its rotting flesh grow more and more pungent as it draws near. It lets out a horrific shriek and lunges at you ravenously."; 2; 1
+"Bog Beast"; "As you wander, a slimy, writhing tendril of moss and lichen grasps at your leg and tries to drag you under! As you pull your leg free and scramble away, several more sinewy appendages give chase, belonging to the vaguely humanoid-shaped beast rising from the waters! "; 2; 2
+"Bloodsucker"; "A worringly-overgrown mosquito, barely held aloft by a pair of translucent wings that produce a maddening whine. Its abdomen is visibly swollen with blood. It charges right at you, clearly looking for another meal!"; 1; 2
+"Dullahan"; "A silhouette of a man on horseback appears on the horizon. Once you get closer, you realize that in place of his head is a cold, blue fire, and he's charging straight towards you, sword raised!"; 3; 2
+"Dredger"; "This creature seems to have more in common with a bloated corpse than a human, despite your initial impression. Its eyesockets are sunken, hollow voids, and its skin sags to the extent that it looks as if it is being pulled towards the underworld. Upon noticing your presence, it releases a deep, throaty gurgle and shambles towards you!"; 2; 1
