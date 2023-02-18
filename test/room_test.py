@@ -14,5 +14,9 @@ class TestEntity(unittest.TestCase):
         self.assertEqual(self.room_.num_foes, -1)
         self.assertFalse(self.room_.treasure)
 
+    def test_room_generator(self):
+        self.room_ = room.generate_room()
+        self.assertTrue(self.room_)
+
 if __name__ == "__main__":
     unittest.main()
